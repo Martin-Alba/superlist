@@ -25,6 +25,12 @@ export async function registerUser(
         errors: { email: "Ya existe una cuenta con ese email" },
       };
     }
+    if (isAPIError(error) && error.body?.code === "PASSWORD_TOO_SHORT") {
+      return {
+        ok: false,
+        errors: { password: "La contraseña debe tener al menos 8 caracteres" },
+      };
+    }
     if (
       isAPIError(error) &&
       error.body?.code === "VALIDATION_ERROR" &&
