@@ -44,3 +44,35 @@ test("tras registrarse queda una sesión iniciada para ese email", async () => {
     .innerJoin(user, eq(session.userId, user.id));
   expect(sessions).toEqual([{ email: "ana@test.com" }]);
 });
+
+test("el email se guarda sin espacios y en minúsculas", async () => {
+  await expect(
+    registerUser(auth, {
+      email: "  Ana@Test.com ",
+      password: "contraseña-segura",
+    }),
+  ).resolves.toMatchObject({ ok: true });
+
+  const users = await testDb.db.select({ email: user.email }).from(user);
+  expect(users).toEqual([{ email: "ana@test.com" }]);
+});
+
+test("rechaza un email ya registrado con otras mayúsculas", async () => {
+  await registerUser(auth, {
+    email: "ana@test.com",
+    password: "contraseña-segura",
+  });
+
+  await expect(
+    registerUser(auth, {
+      email: "Ana@test.com",
+      password: "otra-contraseña-segura",
+    }),
+  ).resolves.toEqual({
+    ok: false,
+    errors: { email: "Ya existe una cuenta con ese email" },
+  });
+
+  const users = await testDb.db.select({ email: user.email }).from(user);
+  expect(users).toEqual([{ email: "ana@test.com" }]);
+});
