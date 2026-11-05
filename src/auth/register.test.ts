@@ -96,3 +96,31 @@ test("rechaza un email ya registrado con espacios alrededor", async () => {
   const users = await testDb.db.select({ email: user.email }).from(user);
   expect(users).toEqual([{ email: "ana@test.com" }]);
 });
+
+function signUpRequest(email: string) {
+  return new Request("http://localhost:3000/api/auth/sign-up/email", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      name: "",
+      email,
+      password: "contraseña-segura",
+    }),
+  });
+}
+
+test("por el endpoint público, ' Ana@Test.com ' con ana@test.com ya existente responde 422 USER_ALREADY_EXISTS y sigue habiendo 1 usuario", async () => {
+  await registerUser(auth, {
+    email: "ana@test.com",
+    password: "contraseña-segura",
+  });
+
+  const response = await auth.handler(signUpRequest(" Ana@Test.com "));
+
+  expect(response.status).toBe(422);
+  expect(await response.json()).toMatchObject({
+    code: "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL",
+  });
+  const users = await testDb.db.select({ email: user.email }).from(user);
+  expect(users).toEqual([{ email: "ana@test.com" }]);
+});
