@@ -7,3 +7,10 @@ test("SessionStatus con sesión muestra «Sesión iniciada como ana@test.com»",
 
   expect(screen.getByText("Sesión iniciada como ana@test.com")).toBeDefined();
 });
+
+test("SessionStatus sin sesión muestra un enlace a registrarse", () => {
+  render(<SessionStatus email={null} />);
+
+  const link = screen.getByRole("link", { name: "Crear cuenta" });
+  expect(link.getAttribute("href")).toBe("/registro");
+});
