@@ -21,6 +21,8 @@ export default defineConfig({
     command: `pnpm build && pnpm start --port ${port}`,
     url: baseURL,
     reuseExistingServer: false,
+    // El puerto del e2e no es el de `pnpm dev`: la URL base de auth tiene que coincidir con él.
+    env: { BETTER_AUTH_URL: baseURL },
     timeout: 180_000,
   },
 });
