@@ -124,3 +124,11 @@ test("por el endpoint público, ' Ana@Test.com ' con ana@test.com ya existente r
   const users = await testDb.db.select({ email: user.email }).from(user);
   expect(users).toEqual([{ email: "ana@test.com" }]);
 });
+
+test("por el endpoint público, ' Ana@Test.com ' sin cuenta previa crea la cuenta guardada como ana@test.com", async () => {
+  const response = await auth.handler(signUpRequest(" Ana@Test.com "));
+
+  expect(response.status).toBe(200);
+  const users = await testDb.db.select({ email: user.email }).from(user);
+  expect(users).toEqual([{ email: "ana@test.com" }]);
+});
