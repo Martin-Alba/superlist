@@ -1,7 +1,8 @@
 import { boolean, index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
 // Tablas de Better Auth (usuario, sesión, cuenta), a partir de getAuthTables() de better-auth 1.7.16.
-// Los ids son strings que genera Better Auth. `verification` se añade cuando haya verificación de email.
+// Los ids son strings que genera Better Auth. `verification` no se usa todavía (no hay verificación de email),
+// pero Better Auth comprueba al arrancar que existe.
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -57,4 +58,20 @@ export const account = pgTable(
       .$onUpdate(() => new Date()),
   },
   (table) => [index("account_user_id_idx").on(table.userId)],
+);
+
+export const verification = pgTable(
+  "verification",
+  {
+    id: text("id").primaryKey(),
+    identifier: text("identifier").notNull(),
+    value: text("value").notNull(),
+    expiresAt: timestamp("expires_at").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at")
+      .notNull()
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
