@@ -132,3 +132,18 @@ test("por el endpoint público, ' Ana@Test.com ' sin cuenta previa crea la cuent
   const users = await testDb.db.select({ email: user.email }).from(user);
   expect(users).toEqual([{ email: "ana@test.com" }]);
 });
+
+test("rechaza un email con formato incorrecto indicando el campo email", async () => {
+  await expect(
+    registerUser(auth, {
+      email: "no-es-un-email",
+      password: "contraseña-segura",
+    }),
+  ).resolves.toEqual({
+    ok: false,
+    errors: { email: "Introduce un email válido" },
+  });
+
+  const users = await testDb.db.select({ email: user.email }).from(user);
+  expect(users).toEqual([]);
+});
