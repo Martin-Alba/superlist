@@ -25,6 +25,16 @@ export async function registerUser(
         errors: { email: "Ya existe una cuenta con ese email" },
       };
     }
+    if (
+      isAPIError(error) &&
+      error.body?.code === "VALIDATION_ERROR" &&
+      error.body.message?.includes("[body.email]")
+    ) {
+      return {
+        ok: false,
+        errors: { email: "Introduce un email válido" },
+      };
+    }
     throw error;
   }
 }
