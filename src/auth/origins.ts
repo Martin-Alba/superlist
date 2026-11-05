@@ -10,6 +10,13 @@ export function authOrigins(env: AuthEnv): {
   baseURL: string;
   trustedOrigins: string[];
 } {
+  if (env.VERCEL_ENV === "preview") {
+    const baseURL = `https://${env.VERCEL_URL}`;
+    return {
+      baseURL,
+      trustedOrigins: [baseURL, `https://${env.VERCEL_BRANCH_URL}`],
+    };
+  }
   const baseURL = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`;
   return { baseURL, trustedOrigins: [baseURL] };
 }
