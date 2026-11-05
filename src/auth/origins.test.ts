@@ -32,3 +32,12 @@ test("en preview se permiten exactamente la URL del despliegue y la de su rama, 
     ],
   });
 });
+
+test("en local (sin VERCEL_ENV) la URL base y el único origen son BETTER_AUTH_URL", () => {
+  const result = authOrigins({ BETTER_AUTH_URL: "http://localhost:3100" });
+
+  expect(result).toEqual({
+    baseURL: "http://localhost:3100",
+    trustedOrigins: ["http://localhost:3100"],
+  });
+});
