@@ -168,3 +168,18 @@ test("acepta una contraseña de exactamente 8 caracteres", async () => {
   const users = await testDb.db.select({ email: user.email }).from(user);
   expect(users).toEqual([{ email: "ana@test.com" }]);
 });
+
+test("con email y contraseña inválidos informa de los dos campos", async () => {
+  await expect(
+    registerUser(auth, { email: "no-es-un-email", password: "1234567" }),
+  ).resolves.toEqual({
+    ok: false,
+    errors: {
+      email: "Introduce un email válido",
+      password: "La contraseña debe tener al menos 8 caracteres",
+    },
+  });
+
+  const users = await testDb.db.select({ email: user.email }).from(user);
+  expect(users).toEqual([]);
+});
