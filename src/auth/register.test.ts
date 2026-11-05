@@ -76,3 +76,23 @@ test("rechaza un email ya registrado con otras mayúsculas", async () => {
   const users = await testDb.db.select({ email: user.email }).from(user);
   expect(users).toEqual([{ email: "ana@test.com" }]);
 });
+
+test("rechaza un email ya registrado con espacios alrededor", async () => {
+  await registerUser(auth, {
+    email: "ana@test.com",
+    password: "contraseña-segura",
+  });
+
+  await expect(
+    registerUser(auth, {
+      email: "  ana@test.com ",
+      password: "otra-contraseña-segura",
+    }),
+  ).resolves.toEqual({
+    ok: false,
+    errors: { email: "Ya existe una cuenta con ese email" },
+  });
+
+  const users = await testDb.db.select({ email: user.email }).from(user);
+  expect(users).toEqual([{ email: "ana@test.com" }]);
+});
