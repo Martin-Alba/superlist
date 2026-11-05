@@ -1,4 +1,3 @@
 export function SessionStatus({ email }: { email: string | null }) {
-  void email;
-  return null;
+  return <p>Sesión iniciada como {email}</p>;
 }
