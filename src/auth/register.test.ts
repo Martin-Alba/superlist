@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { afterEach, beforeEach, expect, test } from "vitest";
-import { user } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { session, user } from "@/db/schema";
 import { createTestDb } from "@/db/test-db";
 import { createAuth } from "./auth";
 import { registerUser } from "./register";
@@ -29,4 +30,17 @@ test("registrarse con email y contraseña válidos crea la cuenta", async () => 
   expect(result.ok).toBe(true);
   const users = await testDb.db.select({ email: user.email }).from(user);
   expect(users).toEqual([{ email: "ana@test.com" }]);
+});
+
+test("tras registrarse queda una sesión iniciada para ese email", async () => {
+  await registerUser(auth, {
+    email: "ana@test.com",
+    password: "contraseña-segura",
+  });
+
+  const sessions = await testDb.db
+    .select({ email: user.email })
+    .from(session)
+    .innerJoin(user, eq(session.userId, user.id));
+  expect(sessions).toEqual([{ email: "ana@test.com" }]);
 });
