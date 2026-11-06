@@ -1,3 +1,6 @@
+import { Suspense } from "react";
+import { CurrentSession } from "./current-session";
+
 export default function Home() {
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
@@ -6,6 +9,9 @@ export default function Home() {
         Crea un grupo, invita a otros y gestionen juntos la lista del
         supermercado.
       </p>
+      <Suspense>
+        <CurrentSession />
+      </Suspense>
     </main>
   );
 }

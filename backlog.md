@@ -1,8 +1,9 @@
 # Backlog — Superlist (MVP)
 
 ## Backlog
-1. Como persona, quiero registrarme con email y contraseña, para tener mi propia cuenta.
-2. Como usuario, quiero crear un grupo, para tener una lista de la compra compartida. Requires: #1
+1a. Como persona, quiero registrarme con email y contraseña, para tener mi propia cuenta.
+1b. Como usuario registrado, quiero iniciar y cerrar sesión, para entrar en mi cuenta y salir cuando termine. Requires: #1a
+2. Como usuario, quiero crear un grupo, para tener una lista de la compra compartida. Requires: #1a
 3. Como usuario, quiero cambiar entre mis grupos, para trabajar en la lista de cada uno. Requires: #2
 4. Como miembro, quiero añadir un item a la lista, para que nadie olvide comprarlo. Requires: #2
 5. Como miembro, quiero editar un item con sus unidades, precio y tienda, para saber cuánto, a qué precio y dónde se compra. Requires: #4
@@ -16,10 +17,20 @@
 13. Como dueño, quiero transferir la propiedad del grupo a un miembro, para que el grupo siga funcionando sin mí. Requires: #11
 14. Como dueño, quiero eliminar el grupo, para cerrarlo cuando ya no se use. Requires: #2
 15. Como miembro, quiero abandonar el grupo, para dejar de participar en su lista. Requires: #11
+16. Como usuario, quiero que las páginas protegidas me lleven a iniciar sesión y que quien ya la tiene no vea el registro, para no entrar en pantallas que no me corresponden. Requires: #1b
+17. Como usuario, quiero recuperar mi contraseña si la olvido, para no perder el acceso a mi cuenta. Requires: #1b
+18. Como usuario, quiero tener un nombre en mi perfil, para que los demás miembros me reconozcan. Requires: #1a
+
+## Deuda técnica
+- Limpiar los usuarios que deja el e2e de #1a en la rama `dev` de Neon.
 
 ## Assumptions
 ### Aprobadas
-- #1: incluye iniciar y cerrar sesión. Solo email y contraseña, sin login con Google en el MVP.
+- #1a / #1b: solo email y contraseña, sin login con Google en el MVP.
+- #1a: el email se normaliza siempre (sin espacios al principio y al final, en minúsculas), antes de guardarlo y antes de compararlo.
+- #1a: el formulario pide solo email y contraseña, sin nombre. Contraseña de al menos 8 caracteres, sin reglas de complejidad.
+- #1a: sin verificación de email en el MVP. El mensaje de email duplicado revela que la cuenta existe.
+- #1a: las migraciones se aplican en el build de Vercel (no en `pnpm build`) y deben ser compatibles hacia atrás (solo añadir).
 - #2: quien crea el grupo pasa a ser su dueño. Cada grupo tiene exactamente una lista.
 - #4 / #5: el nombre es obligatorio; unidades, precio y tienda son opcionales. "Unidades" es una cantidad numérica sin unidad de medida (nada de kg o litros en el MVP).
 - #5: el precio es unitario y se guarda en céntimos. El total de la línea es unidades × precio.
