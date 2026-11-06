@@ -17,6 +17,12 @@
 13. Como dueño, quiero transferir la propiedad del grupo a un miembro, para que el grupo siga funcionando sin mí. Requires: #11
 14. Como dueño, quiero eliminar el grupo, para cerrarlo cuando ya no se use. Requires: #2
 15. Como miembro, quiero abandonar el grupo, para dejar de participar en su lista. Requires: #11
+16. Como usuario, quiero que las páginas protegidas me lleven a iniciar sesión y que quien ya la tiene no vea el registro, para no entrar en pantallas que no me corresponden. Requires: #1b
+17. Como usuario, quiero recuperar mi contraseña si la olvido, para no perder el acceso a mi cuenta. Requires: #1b
+18. Como usuario, quiero tener un nombre en mi perfil, para que los demás miembros me reconozcan. Requires: #1a
+
+## Deuda técnica
+- Limpiar los usuarios que deja el e2e de #1a en la rama `dev` de Neon.
 
 ## Assumptions
 ### Aprobadas
