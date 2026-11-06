@@ -17,7 +17,7 @@ export function RegisterForm({
   const errors = state.errors ?? {};
 
   return (
-    <form action={formAction}>
+    <form action={formAction} noValidate>
       <label htmlFor="email">Email</label>
       <input
         id="email"
