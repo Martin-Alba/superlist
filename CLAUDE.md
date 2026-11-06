@@ -13,3 +13,5 @@ Expensive decisions:
 
 ## Conventions
 - Base de datos: las funciones que acceden a datos reciben la base como parámetro de tipo `PgDatabase` (no importan `@/db`), para que los tests les pasen PGlite (`createTestDb()`) y la app les pase Neon.
+- Migraciones: el build de Vercel migra con `pnpm db:migrate && pnpm build` (`vercel.json`); `pnpm build` en local no migra, se hace a mano con `pnpm db:migrate`. La rama `dev` de Neon (la que usa el e2e) y cada rama `preview/*` deben estar migradas.
+- Si un preview de Vercel falla en "Provisioning Integrations" → "Create database branch for deployment" (antes del build, sin logs, ~3 min y "Resource provisioning timed out"): borrar la rama `preview/<rama-de-git>` en la consola de Neon y hacer Redeploy. Pasó en #1a (5-nov-2026) con causa sin identificar; si se repite, abrir un caso de soporte con los ids de despliegue y la ausencia de operaciones en la rama de Neon.
